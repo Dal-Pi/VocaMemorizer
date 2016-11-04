@@ -35,7 +35,7 @@ public class InitVocaListTask extends AbstractVocaQueryTask {
                 VocaDbHelper.VocaEntry.CORRECT_COUNT,
                 VocaDbHelper.VocaEntry.IS_INCORRECT_PREV
         };
-        final String sortOrder = VocaDbHelper.ORDER + " ASC";
+        final String sortOrder = VocaDbHelper.VocaEntry.LAST_UPDATED + " ASC";
         Cursor vocaListCursor = db.query(VocaDbHelper.VocaEntry.TABLE_NAME,
                 projection, null, null, null, null, sortOrder);
         initVocaLinkedList(vocaListCursor, mVocaList);
@@ -72,7 +72,7 @@ public class InitVocaListTask extends AbstractVocaQueryTask {
     }
 
     private VocaData getInputPointData() {
-        return new VocaData(VocaData.ID_INPUT_POINT, VocaDbHelper.VocaEntry.INPUT_POINT_DEFINE,
-                VocaDbHelper.VocaEntry.INPUT_POINT_DEFINE, 0, 0, false);
+        return new VocaData(VocaData.ID_INPUT_POINT, VocaData.INPUT_POINT_DEFINE,
+                VocaData.INPUT_POINT_DEFINE, 0, 0, false);
     }
 }

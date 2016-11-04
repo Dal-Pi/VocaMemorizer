@@ -17,7 +17,6 @@ public class VocaProvider {
     }
 
     private VocaProvider() {
-        mVocaList = new LinkedList<>();
     }
 
     public static VocaProvider getInstance() {
@@ -27,13 +26,14 @@ public class VocaProvider {
         return mInstance;
     }
 
-    public void initVocaMap(Context context, final RequestEndCallback callback) {
+    public void initVocaList(Context context, final RequestEndCallback callback) {
+        mVocaList = new LinkedList<>();
         new InitVocaListTask(context, mVocaList, new AbstractVocaQueryTask.QueryEndCallback() {
             @Override
             public void onEndQuery(int type) {
                 callback.onEndRequest();
             }
-        });
+        }).execute();
     }
 
     public void insertVoca(Context context, final VocaData voca,
@@ -45,5 +45,23 @@ public class VocaProvider {
                 callback.onEndRequest();
             }
         }).execute();
+    }
+
+    private int getVocaCount() {
+        return mVocaList.size() - 1; //sub IP's count
+    }
+
+    public VocaData poll() {
+        //1. check vocalist is empty
+        if (getVocaCount() == 0) { //if only has IP
+            return null;
+        }
+        //2. getFront and sent at last if it is IP
+        VocaData voca = mVocaList.remove();
+        if (voca.isInputPoint()) {
+            mVocaList.addLast(voca);
+            voca = mVocaList.remove();
+        }
+        return voca;
     }
 }

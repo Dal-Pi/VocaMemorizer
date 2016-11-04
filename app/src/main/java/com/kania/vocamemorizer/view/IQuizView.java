@@ -7,5 +7,6 @@ import com.kania.vocamemorizer.data.VocaData;
  */
 
 public interface IQuizView {
-    void newQuiz(VocaData voca);
+    void setEmptyView();
+    void setVoca(VocaData voca);
 }

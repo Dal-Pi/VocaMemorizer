@@ -25,8 +25,8 @@ public class VocaDbHelper extends SQLiteOpenHelper {
                     VocaEntry._ID + " INTEGER PRIMARY KEY," +
                     VocaEntry.VOCA_WORD + TEXT_TYPE + COMMA_SEP +
                     VocaEntry.VOCA_MEANING + TEXT_TYPE + COMMA_SEP +
-                    VocaEntry.LAST_UPDATED + INTEGER_TYPE +
-                    VocaEntry.CORRECT_COUNT + INTEGER_TYPE +
+                    VocaEntry.LAST_UPDATED + INTEGER_TYPE + COMMA_SEP +
+                    VocaEntry.CORRECT_COUNT + INTEGER_TYPE + COMMA_SEP +
                     VocaEntry.IS_INCORRECT_PREV + INTEGER_TYPE +
                     " )";
 
@@ -50,7 +50,6 @@ public class VocaDbHelper extends SQLiteOpenHelper {
 
     static abstract class VocaEntry implements BaseColumns {
         static final String TABLE_NAME = "vocalist";
-        static final String INPUT_POINT_DEFINE = "__IP__";
 
         static final String VOCA_WORD = "word";
         static final String VOCA_MEANING = "meaning";

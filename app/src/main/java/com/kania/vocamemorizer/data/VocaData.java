@@ -8,9 +8,10 @@ import java.util.ArrayList;
  */
 
 public class VocaData {
-    public static final String MEANING_DELIMITER = "_";
+    public static final String MEANING_DELIMITER = "/";
     public static final int ID_NOT_NEEDED = -2;
     public static final int ID_INPUT_POINT = -1;
+    public static final String INPUT_POINT_DEFINE = "__IP__";
 
     public int id;
     public String word;
@@ -49,5 +50,9 @@ public class VocaData {
             }
         }
         return sb.toString();
+    }
+
+    public boolean isInputPoint() {
+        return (id == ID_INPUT_POINT) && INPUT_POINT_DEFINE.equals(word);
     }
 }

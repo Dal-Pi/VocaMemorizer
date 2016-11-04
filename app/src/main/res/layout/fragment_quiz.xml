@@ -34,6 +34,7 @@
                 android:id="@+id/frag_quiz_edit_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="text"
                 android:gravity="center"
                 android:hint="@string/frag_quiz_edit_hint"
                 />
