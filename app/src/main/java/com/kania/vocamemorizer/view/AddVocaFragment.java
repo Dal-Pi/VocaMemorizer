@@ -115,7 +115,8 @@ public class AddVocaFragment extends Fragment implements IAddVocaView, View.OnCl
     private void addMeaningEdit() {
         EditText edit = new EditText(getActivity());
         edit.setSingleLine();
-        edit.setHint(getString(R.string.frag_add_edit_meaning_hint));
+        edit.setHint(getString(R.string.frag_add_edit_meaning_hint) + " " +
+                (mMeaningEdits.size() + 1));
         edit.addTextChangedListener(new NonEmptyTextWatcher());
         mLayoutMeanings.addView(edit);
         mMeaningEdits.add(edit);
