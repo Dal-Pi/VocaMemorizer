@@ -22,7 +22,7 @@ public class AddVocaViewPresenter implements IAddVocaViewPresenter {
 
     @Override
     public void addVoca(String word, String meaningString) {
-        VocaData voca = new VocaData(VocaData.ID_NOT_NEEDED, word, meaningString);
+        VocaData voca = new VocaData(VocaData.ID_NOT_NEEDED, word.trim(), meaningString);
         voca.touch();
         VocaProvider.getInstance().insertVoca(mContext, voca,
                 new VocaProvider.RequestEndCallback() {

@@ -8,14 +8,16 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.kania.vocamemorizer.R;
 import com.kania.vocamemorizer.data.VocaData;
 import com.kania.vocamemorizer.presenter.AddVocaViewPresenter;
 import com.kania.vocamemorizer.presenter.IAddVocaViewPresenter;
+import com.kania.vocamemorizer.util.ViewUtil;
 
 import java.util.ArrayList;
 
@@ -33,8 +35,8 @@ public class AddVocaFragment extends Fragment implements IAddVocaView, View.OnCl
 
     private EditText mEditWord;
     private LinearLayout mLayoutMeanings;
-    private Button mBtnAdd;
-    private Button mBtnCancel;
+    private ImageButton mBtnAdd;
+    private ImageButton mBtnCancel;
 
     private ArrayList<EditText> mMeaningEdits;
 
@@ -80,9 +82,9 @@ public class AddVocaFragment extends Fragment implements IAddVocaView, View.OnCl
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.frag_add_btn_add) {
+        if (id == R.id.frag_add_imgbtn_add) {
             add();
-        } else if (id == R.id.frag_add_btn_cancle) {
+        } else if (id == R.id.frag_add_imgbtn_cancle) {
             finishAddView();
         }
     }
@@ -90,16 +92,20 @@ public class AddVocaFragment extends Fragment implements IAddVocaView, View.OnCl
     private void initView(View rootView) {
         mEditWord = (EditText)rootView.findViewById(R.id.frag_add_edit_word);
         mEditWord.setSingleLine();
+        mEditWord.requestFocus();
+        ViewUtil.setEditColor(mEditWord, getResources().getColor(R.color.colorAccent));
         mLayoutMeanings = (LinearLayout)rootView.findViewById(R.id.frag_add_layout_meanings);
         addMeaningEdit();
-        mBtnAdd = (Button)rootView.findViewById(R.id.frag_add_btn_add);
+        mBtnAdd = (ImageButton)rootView.findViewById(R.id.frag_add_imgbtn_add);
         if (mBtnAdd != null) {
             mBtnAdd.setOnClickListener(this);
         }
-        mBtnCancel = (Button)rootView.findViewById(R.id.frag_add_btn_cancle);
+        ViewUtil.setImageButtonColor(mBtnAdd, getResources().getColor(R.color.color_add_confirm));
+        mBtnCancel = (ImageButton)rootView.findViewById(R.id.frag_add_imgbtn_cancle);
         if (mBtnCancel != null) {
             mBtnCancel.setOnClickListener(this);
         }
+        ViewUtil.setImageButtonColor(mBtnCancel, getResources().getColor(R.color.color_add_cancel));
     }
 
     private void setCallback(EndAddVocaCallback callback) {
@@ -117,15 +123,25 @@ public class AddVocaFragment extends Fragment implements IAddVocaView, View.OnCl
 
     private void add() {
         String word = mEditWord.getText().toString();
+        if (word.trim().length() == 0) {
+            Toast.makeText(getActivity(), R.string.frag_add_toast_empty_text,
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < mMeaningEdits.size(); ++i) {
             String candidate = mMeaningEdits.get(i).getText().toString();
-            if (!candidate.isEmpty()) {
+            if (candidate.trim().length() > 0) {
                 if (sb.length() > 0) {
                     sb.append(VocaData.MEANING_DELIMITER);
                 }
                 sb.append(candidate);
             }
+        }
+        if (sb.length() == 0) {
+            Toast.makeText(getActivity(), R.string.frag_add_toast_empty_meaning,
+                    Toast.LENGTH_SHORT).show();
+            return;
         }
         mPresenter.addVoca(word, sb.toString());
     }

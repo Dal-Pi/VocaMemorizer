@@ -6,6 +6,7 @@ package com.kania.vocamemorizer.presenter;
 
 public interface IQuizViewPresenter {
     void startQuiz();
+    void selectInfo();
     void selectVerify(String candidate);
     void selectRemain();
     void selectRemove();

@@ -2,20 +2,27 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     >
 
     <RelativeLayout
         android:id="@+id/frag_quiz_layout_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <TextView
+            android:id="@+id/frag_quiz_text_empty_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:text="@string/frag_quiz_empty"/>
-
+            android:text="@string/frag_quiz_empty_title"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/frag_quiz_text_empty_title"
+            android:layout_centerHorizontal="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:text="@string/frag_quiz_empty_desc"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -23,26 +30,43 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-            <EditText
-                android:id="@+id/frag_quiz_edit_word"
+            >
+            <ImageButton
+                android:id="@+id/frag_quiz_imgbtn_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:gravity="center"
-                android:hint="@string/frag_quiz_edit_hint"
-                />
-            <Button
-                android:id="@+id/frag_quiz_btn_verify"
-                android:layout_width="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/ic_info_black_24dp"
+                android:background="@null"/>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/frag_quiz_btn_verify"/>
-        </LinearLayout>
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:gravity="center">
+                <EditText
+                    android:id="@+id/frag_quiz_edit_word"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:imeOptions="flagNoExtractUi|actionDone"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:hint="@string/frag_quiz_edit_hint"
+                    />
+                <ImageButton
+                    android:id="@+id/frag_quiz_imgbtn_verify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_check_circle_black_48dp"
+                    android:background="@null"/>
+            </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

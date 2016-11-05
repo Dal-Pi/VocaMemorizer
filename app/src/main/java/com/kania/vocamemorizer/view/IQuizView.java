@@ -10,4 +10,5 @@ public interface IQuizView {
     void setEmptyView();
     void setVoca(VocaData voca);
     void showResultDialog(String word, boolean isCorrected);
+    void showInfoDialog(boolean isIncorrectPrevTime);
 }

@@ -33,6 +33,11 @@ public class QuizViewPresenter implements IQuizViewPresenter {
     }
 
     @Override
+    public void selectInfo() {
+        mView.showInfoDialog(mNowSetVoca.isIncorrectPrev());
+    }
+
+    @Override
     public void selectVerify(String candidate) {
         if (isCorrect(candidate.trim())) {
             mNowSetVoca.correct();
