@@ -1,12 +1,15 @@
 package com.kania.vocamemorizer.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -19,12 +22,13 @@ import com.kania.vocamemorizer.presenter.QuizViewPresenter;
  * Created by Seonghan Kim on 2016-11-03.
  */
 
-public class QuizViewFragment extends Fragment implements IQuizView {
+public class QuizViewFragment extends Fragment implements IQuizView, View.OnClickListener {
     private IQuizViewPresenter mPresenter;
 
     private ViewGroup mEmptyView;
     private ViewGroup mQuizView;
     private EditText mEditWord;
+    private Button mBtnVerify;
     private ListView mListMeanings;
     private ArrayAdapter<String> mAdapter;
 
@@ -51,6 +55,8 @@ public class QuizViewFragment extends Fragment implements IQuizView {
         enableEmptyView(true);
         mEditWord = (EditText)view.findViewById(R.id.frag_quiz_edit_word);
         mEditWord.setSingleLine();
+        mBtnVerify = (Button)view.findViewById(R.id.frag_quiz_btn_verify);
+        mBtnVerify.setOnClickListener(this);
         mListMeanings = (ListView)view.findViewById(R.id.frag_quiz_list_meanings);
         mListMeanings.setAdapter(mAdapter);
         return view;
@@ -70,11 +76,21 @@ public class QuizViewFragment extends Fragment implements IQuizView {
     @Override
     public void setVoca(VocaData voca) {
         enableEmptyView(false);
+        mEditWord.setText("");
         mAdapter.clear();
-        for (String meaning : voca.meanings) {
+        for (String meaning : voca.getMeanings()) {
             mAdapter.add(meaning);
         }
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.frag_quiz_btn_verify) {
+            String candidate = mEditWord.getText().toString();
+            mPresenter.selectVerify(candidate);
+        }
     }
 
     public void enableEmptyView(boolean enable) {
@@ -88,6 +104,37 @@ public class QuizViewFragment extends Fragment implements IQuizView {
         } else {
             mQuizView.setVisibility(View.VISIBLE);
             mEmptyView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void showResultDialog(String word, boolean isCorrected) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        if (isCorrected) {
+            builder.setTitle(R.string.frag_quiz_dlg_title_correct)
+                    .setMessage(word);
+        } else {
+            builder.setTitle(R.string.frag_quiz_dlg_title_incorrect)
+                    .setMessage(getString(R.string.frag_quiz_dlg_msg_incorrect_prefix) + " " + word);
+        }
+        builder.setPositiveButton(R.string.frag_quiz_dlg_btn_remain,
+                new ResultDialogRemainClickListener())
+                .setNegativeButton(R.string.frag_quiz_dlg_btn_remove,
+                        new ResultDialogRemoveClickListener())
+                .create().show();
+    }
+
+    class ResultDialogRemainClickListener implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            mPresenter.selectRemain();
+        }
+    }
+
+    class ResultDialogRemoveClickListener implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            mPresenter.selectRemove();
         }
     }
 }

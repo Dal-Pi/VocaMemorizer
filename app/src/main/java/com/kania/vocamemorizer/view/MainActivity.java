@@ -1,5 +1,6 @@
 package com.kania.vocamemorizer.view;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,9 @@ public class MainActivity extends AppCompatActivity implements AddVocaFragment.E
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        changeStatusbarColor();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.act_main_toolbar);
         setSupportActionBar(toolbar);
 
@@ -66,6 +70,14 @@ public class MainActivity extends AppCompatActivity implements AddVocaFragment.E
         mFab.setVisibility(View.VISIBLE);
     }
 
+    private void changeStatusbarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View decorView = getWindow().getDecorView();
+            int flag = decorView.getSystemUiVisibility();
+            flag |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            decorView.setSystemUiVisibility(flag);
+        }
+    }
     private void setQuizView() {
         FragmentTransaction ft = mFragmentManager.beginTransaction();
         mQuizView = QuizViewFragment.newInstance();

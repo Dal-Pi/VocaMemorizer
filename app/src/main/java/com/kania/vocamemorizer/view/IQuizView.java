@@ -9,4 +9,5 @@ import com.kania.vocamemorizer.data.VocaData;
 public interface IQuizView {
     void setEmptyView();
     void setVoca(VocaData voca);
+    void showResultDialog(String word, boolean isCorrected);
 }

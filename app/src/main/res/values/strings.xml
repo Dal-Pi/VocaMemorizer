@@ -4,6 +4,12 @@
 
     <string name="frag_quiz_empty">No Item</string>
     <string name="frag_quiz_edit_hint">Word</string>
+    <string name="frag_quiz_btn_verify">Verify</string>
+    <string name="frag_quiz_dlg_title_correct">Correct!</string>
+    <string name="frag_quiz_dlg_title_incorrect">Incorrect...</string>
+    <string name="frag_quiz_dlg_msg_incorrect_prefix">Answer : </string>
+    <string name="frag_quiz_dlg_btn_remain">Remain</string>
+    <string name="frag_quiz_dlg_btn_remove">Remove</string>
 
     <string name="frag_add_edit_word_hint">Word</string>
     <string name="frag_add_edit_meaning_hint">Meaning</string>

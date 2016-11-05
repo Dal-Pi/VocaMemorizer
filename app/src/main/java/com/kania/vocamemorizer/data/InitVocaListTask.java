@@ -63,7 +63,7 @@ public class InitVocaListTask extends AbstractVocaQueryTask {
             VocaData voca = new VocaData(id, word, meaningString, lastUpdated, correctCount,
                     isIncorrectPrev);
 
-            if (voca.isIncorrectPrev) {
+            if (voca.isIncorrectPrev()) {
                 linkedList.add(linkedList.indexOf(inputPoint), voca);
             } else {
                 linkedList.addLast(voca);

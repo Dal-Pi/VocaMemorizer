@@ -33,24 +33,59 @@ public class QuizViewPresenter implements IQuizViewPresenter {
     }
 
     @Override
-    public void verify() {
+    public void selectVerify(String candidate) {
+        if (isCorrect(candidate.trim())) {
+            mNowSetVoca.correct();
+        } else {
+            mNowSetVoca.incorrect();
+        }
+        mView.showResultDialog(mNowSetVoca.getWord(), !mNowSetVoca.isIncorrectPrev());
+    }
 
+    @Override
+    public void selectRemove() {
+        VocaProvider provider = VocaProvider.getInstance();
+        provider.removeVoca(mContext, mNowSetVoca, new VocaProvider.RequestEndCallback() {
+            @Override
+            public void onEndRequest() {
+                nextVoca();
+            }
+        });
+    }
+
+    @Override
+    public void selectRemain() {
+        VocaProvider provider = VocaProvider.getInstance();
+        mNowSetVoca.touch();
+        provider.updateVoca(mContext, mNowSetVoca, new VocaProvider.RequestEndCallback() {
+            @Override
+            public void onEndRequest() {
+                nextVoca();
+            }
+        });
+    }
+
+    private boolean isCorrect(String candidate) {
+        return mNowSetVoca.getWord().equalsIgnoreCase(candidate);
     }
 
     private void nextVoca() {
         VocaProvider provider = VocaProvider.getInstance();
-        mNowSetVoca = VocaProvider.getInstance().poll();
+        //TODO test start
+        provider.printVocaListDataLog();
+        //TODO test end
+
+        mNowSetVoca = provider.poll();
+
         if (mNowSetVoca == null) {
             mView.setEmptyView();
             return;
         } else {
+            //TODO test start
+            mNowSetVoca.printDataLog();
+            //TODO test end
             mView.setVoca(mNowSetVoca);
         }
-
-
-
-
     }
-
 
 }

@@ -6,8 +6,6 @@ import com.kania.vocamemorizer.data.VocaData;
 import com.kania.vocamemorizer.data.VocaProvider;
 import com.kania.vocamemorizer.view.IAddVocaView;
 
-import java.util.Calendar;
-
 /**
  * Created by Seonghan Kim on 2016-11-03.
  */
@@ -24,9 +22,8 @@ public class AddVocaViewPresenter implements IAddVocaViewPresenter {
 
     @Override
     public void addVoca(String word, String meaningString) {
-        Calendar calendar = Calendar.getInstance();
-        VocaData voca = new VocaData(VocaData.ID_NOT_NEEDED, word, meaningString,
-                calendar.getTimeInMillis(), 0, false);
+        VocaData voca = new VocaData(VocaData.ID_NOT_NEEDED, word, meaningString);
+        voca.touch();
         VocaProvider.getInstance().insertVoca(mContext, voca,
                 new VocaProvider.RequestEndCallback() {
                     @Override

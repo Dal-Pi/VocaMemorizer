@@ -1,6 +1,9 @@
 package com.kania.vocamemorizer.data;
 
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Seonghan Kim on 2016-10-31.
@@ -13,21 +16,86 @@ public class VocaData {
     public static final int ID_INPUT_POINT = -1;
     public static final String INPUT_POINT_DEFINE = "__IP__";
 
-    public int id;
-    public String word;
-    public ArrayList<String> meanings;
-    public long lastUpdated;
-    public int correctCount;
-    public boolean isIncorrectPrev;
+    private int mId;
+    private String mWord;
+    private ArrayList<String> mMeanings;
+    private long mLastUpdated;
+    private int mCorrectCount; //continually corrected count
+    private boolean mIsIncorrectPrev;
+
+    public VocaData (int id, String word, String meanings) {
+        this.mId = id;
+        this.mWord = word;
+        this.mMeanings = getMeaningList(meanings);
+        this.mLastUpdated = 0;
+        this.mCorrectCount = 0;
+        this.mIsIncorrectPrev = false;
+    }
 
     public VocaData (int id, String word, String meanings, long lastUpdated, int correctCount,
                      boolean isIncorrectPrev) {
-        this.id = id;
-        this.word = word;
-        this.meanings = getMeaningList(meanings);
-        this.lastUpdated = lastUpdated;
-        this.correctCount = correctCount;
-        this.isIncorrectPrev = isIncorrectPrev;
+        this.mId = id;
+        this.mWord = word;
+        this.mMeanings = getMeaningList(meanings);
+        this.mLastUpdated = lastUpdated;
+        this.mCorrectCount = correctCount;
+        this.mIsIncorrectPrev = isIncorrectPrev;
+    }
+
+    public boolean isInputPoint() {
+        return (mId == ID_INPUT_POINT) && INPUT_POINT_DEFINE.equals(mWord);
+    }
+
+    public int getId() {
+        return this.mId;
+    }
+
+    public String getWord() {
+        return this.mWord;
+    }
+
+    public ArrayList<String> getMeanings() {
+        return this.mMeanings;
+    }
+
+    public String getMeaningString() {
+        StringBuilder sb = new StringBuilder();
+        if (mMeanings != null) {
+            for (int i = 0; i < mMeanings.size(); ++i) {
+                sb.append(mMeanings.get(i));
+                if (i < mMeanings.size() - 1) {
+                    sb.append(MEANING_DELIMITER);
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    public long getLastUpdated() {
+        return this.mLastUpdated;
+    }
+
+    public void touch() {
+        Calendar calendar = Calendar.getInstance();
+        this.mLastUpdated = calendar.getTimeInMillis();
+    }
+
+    public int getCorrectCount() {
+        return this.mCorrectCount;
+    }
+
+    public void correct() {
+        this.mCorrectCount++;
+        this.mIsIncorrectPrev = false;
+    }
+
+    public void incorrect() {
+        this.mCorrectCount = 0;
+        this.mIsIncorrectPrev = true;
+    }
+
+    public boolean isIncorrectPrev() {
+        return this.mIsIncorrectPrev;
     }
 
     private ArrayList<String> getMeaningList(String meaningString) {
@@ -39,20 +107,18 @@ public class VocaData {
         return ret;
     }
 
-    public String getMeaningString() {
+    //for test
+    public void printDataLog() {
         StringBuilder sb = new StringBuilder();
-        if (meanings != null) {
-            for (int i = 0; i < meanings.size(); ++i) {
-                sb.append(meanings.get(i));
-                if (i < meanings.size() - 1) {
-                    sb.append(MEANING_DELIMITER);
-                }
-            }
-        }
-        return sb.toString();
-    }
-
-    public boolean isInputPoint() {
-        return (id == ID_INPUT_POINT) && INPUT_POINT_DEFINE.equals(word);
+        sb.append("VocaData : ");
+        sb.append(mWord);
+        sb.append("(");
+        sb.append(getMeaningString());
+        sb.append(")_");
+        sb.append("correct=");
+        sb.append(mCorrectCount);
+        sb.append("_prev=");
+        sb.append(mIsIncorrectPrev);
+        Log.d("VocaMemorizer", sb.toString());
     }
 }

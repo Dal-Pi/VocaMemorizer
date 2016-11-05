@@ -20,7 +20,7 @@ public abstract class AbstractVocaQueryTask extends AsyncTask<Void, Void, Void> 
     }
 
     private QueryEndCallback mCallback;
-    private int mQueryType = QUERY_TYPE_NOT_DEFINED;
+    protected int mQueryType = QUERY_TYPE_NOT_DEFINED;
 
     public AbstractVocaQueryTask(QueryEndCallback callback) {
         mCallback = callback;
