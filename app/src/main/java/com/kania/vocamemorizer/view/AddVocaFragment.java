@@ -27,10 +27,6 @@ import java.util.ArrayList;
 
 public class AddVocaFragment extends Fragment implements IAddVocaView, View.OnClickListener {
 
-    public interface EndAddVocaCallback {
-        void onEndAddVoca();
-    }
-
     private IAddVocaViewPresenter mPresenter;
 
     private EditText mEditWord;
@@ -40,11 +36,8 @@ public class AddVocaFragment extends Fragment implements IAddVocaView, View.OnCl
 
     private ArrayList<EditText> mMeaningEdits;
 
-    private EndAddVocaCallback mCallback;
-
-    public static AddVocaFragment newInstance(EndAddVocaCallback callback) {
+    public static AddVocaFragment newInstance() {
         AddVocaFragment fragment = new AddVocaFragment();
-        fragment.setCallback(callback);
         return fragment;
     }
 
@@ -66,12 +59,6 @@ public class AddVocaFragment extends Fragment implements IAddVocaView, View.OnCl
         } else {
             return super.onCreateView(inflater, container, savedInstanceState);
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallback.onEndAddVoca();
     }
 
     @Override
@@ -106,10 +93,6 @@ public class AddVocaFragment extends Fragment implements IAddVocaView, View.OnCl
             mBtnCancel.setOnClickListener(this);
         }
         ViewUtil.setImageButtonColor(mBtnCancel, getResources().getColor(R.color.color_add_cancel));
-    }
-
-    private void setCallback(EndAddVocaCallback callback) {
-        mCallback = callback;
     }
 
     private void addMeaningEdit() {

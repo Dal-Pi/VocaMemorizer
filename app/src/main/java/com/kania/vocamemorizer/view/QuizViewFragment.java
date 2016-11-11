@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.kania.vocamemorizer.R;
 import com.kania.vocamemorizer.data.VocaData;
@@ -28,18 +32,27 @@ import com.kania.vocamemorizer.util.ViewUtil;
 public class QuizViewFragment extends Fragment implements IQuizView, View.OnClickListener {
     private IQuizViewPresenter mPresenter;
 
+    public interface AddVocaCallback {
+        void onRequestAdd();
+    }
+
     private ViewGroup mEmptyView;
     private ViewGroup mQuizView;
     private EditText mEditWord;
     private ImageButton mImgBtnInfo;
     private ImageButton mImgBtnVerify;
+    private FloatingActionButton mFab;
     private ListView mListMeanings;
     private ArrayAdapter<String> mAdapter;
 
     private boolean mEmptyViewEnabled;
 
-    public static QuizViewFragment newInstance() {
-        return new QuizViewFragment();
+    private AddVocaCallback mCallback;
+
+    public static QuizViewFragment newInstance(AddVocaCallback callback) {
+        QuizViewFragment fragment = new QuizViewFragment();
+        fragment.setCallback(callback);
+        return fragment;
     }
 
     @Override
@@ -61,6 +74,7 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
         mEmptyViewEnabled = true;
         mEditWord = (EditText) view.findViewById(R.id.frag_quiz_edit_word);
         mEditWord.setSingleLine();
+        mEditWord.addTextChangedListener(new EmptyTextWatcher());
         ViewUtil.setEditColor(mEditWord, getResources().getColor(R.color.pastel_blue));
         mImgBtnInfo = (ImageButton) view.findViewById(R.id.frag_quiz_imgbtn_info);
         mImgBtnInfo.setOnClickListener(this);
@@ -68,6 +82,13 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
         mImgBtnVerify = (ImageButton) view.findViewById(R.id.frag_quiz_imgbtn_verify);
         mImgBtnVerify.setOnClickListener(this);
         ViewUtil.setImageButtonColor(mImgBtnVerify, getResources().getColor(R.color.pastel_blue));
+        mFab = (FloatingActionButton) view.findViewById(R.id.frag_quiz_fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCallback.onRequestAdd();
+            }
+        });
         mListMeanings = (ListView) view.findViewById(R.id.frag_quiz_list_meanings);
         mListMeanings.setAdapter(mAdapter);
         return view;
@@ -114,7 +135,12 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
         int id = v.getId();
         if (id == R.id.frag_quiz_imgbtn_verify) {
             String candidate = mEditWord.getText().toString();
-            mPresenter.selectVerify(candidate);
+            if (candidate.length() == 0) {
+                Toast.makeText(getActivity(), R.string.frag_quiz_toast_empty_text,
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                mPresenter.selectVerify(candidate);
+            }
         } else if (id == R.id.frag_quiz_imgbtn_info) {
             mPresenter.selectInfo();
         }
@@ -127,7 +153,9 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
         if (isCorrected) {
             builder.setTitle(R.string.frag_quiz_dlg_title_correct)
                     .setMessage(word)
-                    .setIcon(R.drawable.ic_sentiment_very_satisfied_black_48dp);
+                    .setIcon(R.drawable.ic_sentiment_very_satisfied_black_48dp)
+                    .setNegativeButton(R.string.frag_quiz_dlg_btn_remove,
+                            new ResultDialogRemoveClickListener());
             color = getResources().getColor(R.color.color_corrected);
         } else {
             builder.setTitle(R.string.frag_quiz_dlg_title_incorrect)
@@ -136,9 +164,7 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
             color = getResources().getColor(R.color.color_incorrected);
         }
         builder.setPositiveButton(R.string.frag_quiz_dlg_btn_remain,
-                new ResultDialogRemainClickListener())
-                .setNegativeButton(R.string.frag_quiz_dlg_btn_remove,
-                        new ResultDialogRemoveClickListener());
+                new ResultDialogRemainClickListener());
         AlertDialog dialog = builder.create();
         ViewUtil.setDialogButtonColor(dialog, color, color, color);
         dialog.show();
@@ -156,10 +182,16 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
             builder.setMessage(R.string.frag_quiz_dlg_msg_info_correct_prev);
             color = getResources().getColor(R.color.color_corrected);
         }
-        builder.setPositiveButton(R.string.frag_quiz_dlg_btn_ok, null);
+        builder.setPositiveButton(R.string.frag_quiz_dlg_btn_ok, null)
+                .setNegativeButton(R.string.frag_quiz_dlg_btn_remove_force,
+                new ResultDialogRemoveClickListener());
         AlertDialog dialog = builder.create();
         ViewUtil.setDialogButtonColor(dialog, color, color, color);
         dialog.show();
+    }
+
+    private void setCallback(AddVocaCallback callback) {
+        mCallback = callback;
     }
 
     private void enableEmptyView(boolean enable) {
@@ -171,6 +203,7 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
             hideInputMethod(mEditWord);
             mQuizView.setVisibility(View.GONE);
             mEmptyView.setVisibility(View.VISIBLE);
+            mFab.setVisibility(View.VISIBLE);
         } else {
             mQuizView.setVisibility(View.VISIBLE);
             mEmptyView.setVisibility(View.GONE);
@@ -200,6 +233,27 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
         @Override
         public void onClick(DialogInterface dialog, int which) {
             mPresenter.selectRemove();
+        }
+    }
+
+    class EmptyTextWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.length() == 0) {
+                mFab.setVisibility(View.VISIBLE);
+            } else {
+                mFab.setVisibility(View.GONE);
+            }
         }
     }
 }

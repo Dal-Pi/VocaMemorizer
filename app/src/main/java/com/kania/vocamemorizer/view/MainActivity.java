@@ -2,7 +2,6 @@ package com.kania.vocamemorizer.view;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -11,12 +10,10 @@ import android.view.View;
 
 import com.kania.vocamemorizer.R;
 
-public class MainActivity extends AppCompatActivity implements AddVocaFragment.EndAddVocaCallback {
+public class MainActivity extends AppCompatActivity implements QuizViewFragment.AddVocaCallback {
 
     private FragmentManager mFragmentManager;
     private Fragment mQuizView;
-
-    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,19 +21,12 @@ public class MainActivity extends AppCompatActivity implements AddVocaFragment.E
         setContentView(R.layout.activity_main);
         changeStatusbarColor();
         mFragmentManager = getSupportFragmentManager();
-        mFab = (FloatingActionButton) findViewById(R.id.act_main_fab);
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setAddView();
-            }
-        });
         setQuizView();
     }
 
     @Override
-    public void onEndAddVoca() {
-        mFab.setVisibility(View.VISIBLE);
+    public void onRequestAdd() {
+        setAddView();
     }
 
     private void changeStatusbarColor() {
@@ -49,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements AddVocaFragment.E
     }
     private void setQuizView() {
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        mQuizView = QuizViewFragment.newInstance();
+        mQuizView = QuizViewFragment.newInstance(this);
         ft.add(R.id.act_main_container, mQuizView,
                 QuizViewFragment.class.getCanonicalName());
         ft.commit();
@@ -57,9 +47,8 @@ public class MainActivity extends AppCompatActivity implements AddVocaFragment.E
 
     private void setAddView() {
         if (mQuizView != null) {
-            mFab.setVisibility(View.GONE);
             FragmentTransaction ft = mFragmentManager.beginTransaction();
-            ft.replace(R.id.act_main_container, AddVocaFragment.newInstance(this),
+            ft.replace(R.id.act_main_container, AddVocaFragment.newInstance(),
                     AddVocaFragment.class.getCanonicalName());
             ft.addToBackStack(null);
             ft.commit();

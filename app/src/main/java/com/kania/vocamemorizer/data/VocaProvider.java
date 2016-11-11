@@ -58,10 +58,13 @@ public class VocaProvider {
                 new AbstractVocaQueryTask.QueryEndCallback() {
                     @Override
                     public void onEndQuery(int type) {
-                        if (voca.isIncorrectPrev()) {
-                            mVocaList.add(mVocaList.indexOf(mInputPoint), voca);
-                        } else {
-                            mVocaList.addLast(voca);
+                        VocaData target = mVocaList.remove(mVocaList.indexOf(voca));
+                        if (target != null) {
+                            if (voca.isIncorrectPrev()) {
+                                mVocaList.add(mVocaList.indexOf(mInputPoint), voca);
+                            } else {
+                                mVocaList.addLast(voca);
+                            }
                         }
                         callback.onEndRequest();
                     }
@@ -74,6 +77,7 @@ public class VocaProvider {
                 new AbstractVocaQueryTask.QueryEndCallback() {
                     @Override
                     public void onEndQuery(int type) {
+                        mVocaList.remove(mVocaList.indexOf(voca));
                         callback.onEndRequest();
                     }
                 }).execute();
@@ -85,12 +89,11 @@ public class VocaProvider {
             return null;
         }
         //2. getFront and sent at last if it is IP
-        VocaData voca = mVocaList.remove();
-        if (voca.isInputPoint()) {
-            mVocaList.addLast(voca);
-            voca = mVocaList.remove();
+        if (mVocaList.getFirst().isInputPoint()) {
+            mVocaList.addLast(mVocaList.remove());
         }
-        return voca;
+        //3. get word
+        return mVocaList.getFirst();
     }
 
     private int getVocaCount() {

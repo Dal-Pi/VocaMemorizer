@@ -14,7 +14,9 @@
     <string name="frag_quiz_dlg_btn_ok">Ok</string>
     <string name="frag_quiz_dlg_btn_remain">Next</string>
     <string name="frag_quiz_dlg_btn_remove">Remove</string>
+    <string name="frag_quiz_dlg_btn_remove_force">Force Removal</string>
     <string name="frag_quiz_empty_desc">Select + to add vocabulary.</string>
+    <string name="frag_quiz_toast_empty_text">Word is empty.</string>
 
     <string name="frag_add_edit_word_hint">word</string>
     <string name="frag_add_edit_meaning_hint">meaning</string>
