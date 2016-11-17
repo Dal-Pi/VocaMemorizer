@@ -21,7 +21,9 @@ public class MainActivity extends AppCompatActivity implements QuizViewFragment.
         setContentView(R.layout.activity_main);
         changeStatusbarColor();
         mFragmentManager = getSupportFragmentManager();
-        setQuizView();
+        if (savedInstanceState == null) {
+            setQuizView();
+        }
     }
 
     @Override
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements QuizViewFragment.
     }
     private void setQuizView() {
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        mQuizView = QuizViewFragment.newInstance(this);
+        mQuizView = QuizViewFragment.newInstance();
         ft.add(R.id.act_main_container, mQuizView,
                 QuizViewFragment.class.getCanonicalName());
         ft.commit();

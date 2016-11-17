@@ -49,9 +49,8 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
 
     private AddVocaCallback mCallback;
 
-    public static QuizViewFragment newInstance(AddVocaCallback callback) {
+    public static QuizViewFragment newInstance() {
         QuizViewFragment fragment = new QuizViewFragment();
-        fragment.setCallback(callback);
         return fragment;
     }
 
@@ -98,6 +97,22 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mPresenter.startQuiz();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof AddVocaCallback) {
+            mCallback = (AddVocaCallback)context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement AddVocaCallback");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
     }
 
     @Override
@@ -188,10 +203,6 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
         AlertDialog dialog = builder.create();
         ViewUtil.setDialogButtonColor(dialog, color, color, color);
         dialog.show();
-    }
-
-    private void setCallback(AddVocaCallback callback) {
-        mCallback = callback;
     }
 
     private void enableEmptyView(boolean enable) {
