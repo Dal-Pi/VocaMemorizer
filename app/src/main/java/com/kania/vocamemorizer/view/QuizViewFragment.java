@@ -10,6 +10,8 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -57,6 +59,7 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         mPresenter = new QuizViewPresenter(getActivity(), this);
         mAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
     }
@@ -113,6 +116,13 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
     public void onDetach() {
         super.onDetach();
         mCallback = null;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_quiz, menu);
+        ViewUtil.setMenuItemColor(menu.findItem(R.id.menu_fragment_quiz_list),
+                getResources().getColor(R.color.blue));
     }
 
     @Override

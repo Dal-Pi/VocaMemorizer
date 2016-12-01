@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">VocaMemorizer</string>
-    <string name="action_settings">Settings</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_slideshow">Slide Show</string>
 
+    <string name="menu_list">View List</string>
     <string name="frag_quiz_empty_title">No Item</string>
     <string name="frag_quiz_edit_hint">word</string>
     <string name="frag_quiz_btn_verify">Verify</string>
@@ -18,9 +20,9 @@
     <string name="frag_quiz_empty_desc">Select + to add vocabulary.</string>
     <string name="frag_quiz_toast_empty_text">Word is empty.</string>
 
+    <string name="menu_add">Add</string>
     <string name="frag_add_edit_word_hint">word</string>
     <string name="frag_add_edit_meaning_hint">meaning</string>
-    <string name="frag_add_add">Add</string>
     <string name="frag_add_cancel">Cancel</string>
     <string name="frag_add_toast_empty_text">Word is empty.</string>
     <string name="frag_add_toast_empty_meaning">There is no meaning text.</string>

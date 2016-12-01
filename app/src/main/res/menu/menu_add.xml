@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.kania.vocamemorizer.view.AddVocaActivity">
+    <item
+        android:id="@+id/menu_fragment_add_add"
+        android:orderInCategory="100"
+        android:title="@string/menu_add"
+        android:icon="@drawable/ic_add_circle_black_48dp"
+        app:showAsAction="always" />
+</menu>

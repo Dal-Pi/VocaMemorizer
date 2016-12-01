@@ -6,10 +6,12 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -25,14 +27,12 @@ import java.util.ArrayList;
  * Created by Seonghan Kim on 2016-11-03.
  */
 
-public class AddVocaFragment extends Fragment implements IAddVocaView, View.OnClickListener {
+public class AddVocaFragment extends Fragment implements IAddVocaView {
 
     private IAddVocaViewPresenter mPresenter;
 
     private EditText mEditWord;
     private LinearLayout mLayoutMeanings;
-    private ImageButton mBtnAdd;
-    private ImageButton mBtnCancel;
 
     private ArrayList<EditText> mMeaningEdits;
 
@@ -44,14 +44,15 @@ public class AddVocaFragment extends Fragment implements IAddVocaView, View.OnCl
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         mPresenter = new AddVocaViewPresenter(getActivity(), this);
         mMeaningEdits = new ArrayList<>();
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //TODO set layout
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add, container, false);
         if (view != null) {
             initView(view);
@@ -67,12 +68,24 @@ public class AddVocaFragment extends Fragment implements IAddVocaView, View.OnCl
     }
 
     @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.frag_add_imgbtn_add) {
-            add();
-        } else if (id == R.id.frag_add_imgbtn_cancle) {
-            finishAddView();
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_add, menu);
+        MenuItem itemAdd = menu.findItem(R.id.menu_fragment_add_add);
+        ViewUtil.setMenuItemColor(itemAdd, getResources().getColor(R.color.color_add_confirm));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finishAddView();
+                return true;
+            case R.id.menu_fragment_add_add:
+                add();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -83,16 +96,6 @@ public class AddVocaFragment extends Fragment implements IAddVocaView, View.OnCl
         ViewUtil.setEditColor(mEditWord, getResources().getColor(R.color.colorAccent));
         mLayoutMeanings = (LinearLayout)rootView.findViewById(R.id.frag_add_layout_meanings);
         addMeaningEdit();
-        mBtnAdd = (ImageButton)rootView.findViewById(R.id.frag_add_imgbtn_add);
-        if (mBtnAdd != null) {
-            mBtnAdd.setOnClickListener(this);
-        }
-        ViewUtil.setImageButtonColor(mBtnAdd, getResources().getColor(R.color.color_add_confirm));
-        mBtnCancel = (ImageButton)rootView.findViewById(R.id.frag_add_imgbtn_cancle);
-        if (mBtnCancel != null) {
-            mBtnCancel.setOnClickListener(this);
-        }
-        ViewUtil.setImageButtonColor(mBtnCancel, getResources().getColor(R.color.color_add_cancel));
     }
 
     private void addMeaningEdit() {
