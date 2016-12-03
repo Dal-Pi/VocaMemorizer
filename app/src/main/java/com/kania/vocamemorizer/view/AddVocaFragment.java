@@ -1,10 +1,12 @@
 package com.kania.vocamemorizer.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,9 +38,19 @@ public class AddVocaFragment extends Fragment implements IAddVocaView {
 
     private ArrayList<EditText> mMeaningEdits;
 
+    private AddFinishedCallback mCallback;
+
     public static AddVocaFragment newInstance() {
         AddVocaFragment fragment = new AddVocaFragment();
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof AddFinishedCallback) {
+            mCallback = (AddFinishedCallback)context;
+        }
     }
 
     @Override
@@ -63,8 +75,8 @@ public class AddVocaFragment extends Fragment implements IAddVocaView {
     }
 
     @Override
-    public void finish() {
-        finishAddView();
+    public void addFinished() {
+        finishAddView(true);
     }
 
     @Override
@@ -79,7 +91,7 @@ public class AddVocaFragment extends Fragment implements IAddVocaView {
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
-                finishAddView();
+                finishAddView(false);
                 return true;
             case R.id.menu_fragment_add_add:
                 add();
@@ -87,6 +99,20 @@ public class AddVocaFragment extends Fragment implements IAddVocaView {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public boolean onBackPressed() {
+        finishAddView(false);
+        return true;
+    }
+
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_F12:
+                add();
+                return true;
+        }
+        return false;
     }
 
     private void initView(View rootView) {
@@ -133,8 +159,22 @@ public class AddVocaFragment extends Fragment implements IAddVocaView {
         mPresenter.addVoca(word, sb.toString());
     }
 
-    private void finishAddView() {
+    private void finishAddView(boolean isAdded) {
+        if (mCallback != null) {
+            if (isAdded) {
+                mCallback.addFinished(AddFinishedCallback.ADDED);
+            } else {
+                mCallback.addFinished(AddFinishedCallback.CANCELED);
+            }
+            return;
+        }
         getActivity().onBackPressed();
+    }
+
+    interface AddFinishedCallback {
+        int CANCELED = 0;
+        int ADDED = 1;
+        void addFinished(int isAdded);
     }
 
     class NonEmptyTextWatcher implements TextWatcher {

@@ -20,7 +20,7 @@
     <string name="frag_quiz_empty_desc">Select + to add vocabulary.</string>
     <string name="frag_quiz_toast_empty_text">Word is empty.</string>
 
-    <string name="menu_add">Add</string>
+    <string name="menu_add">Add (F12)</string>
     <string name="frag_add_edit_word_hint">word</string>
     <string name="frag_add_edit_meaning_hint">meaning</string>
     <string name="frag_add_cancel">Cancel</string>

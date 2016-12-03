@@ -70,6 +70,11 @@ public class QuizViewPresenter implements IQuizViewPresenter {
         });
     }
 
+    @Override
+    public void refresh() {
+        startQuiz();
+    }
+
     private boolean isCorrect(String candidate) {
         return mNowSetVoca.getWord().equalsIgnoreCase(candidate);
     }

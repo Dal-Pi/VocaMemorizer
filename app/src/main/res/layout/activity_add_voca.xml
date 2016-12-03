@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/color_background"
     tools:context="com.kania.vocamemorizer.view.AddVocaActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/act_add_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark"
+        android:background="@android:color/transparent"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     <FrameLayout

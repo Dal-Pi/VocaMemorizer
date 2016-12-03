@@ -5,5 +5,5 @@ package com.kania.vocamemorizer.view;
  */
 
 public interface IAddVocaView {
-    void finish();
+    void addFinished();
 }

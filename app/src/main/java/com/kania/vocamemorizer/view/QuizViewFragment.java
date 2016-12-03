@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,7 +35,7 @@ import com.kania.vocamemorizer.util.ViewUtil;
 public class QuizViewFragment extends Fragment implements IQuizView, View.OnClickListener {
     private IQuizViewPresenter mPresenter;
 
-    public interface AddVocaCallback {
+    public interface RequestAddVocaCallback {
         void onRequestAdd();
     }
 
@@ -49,7 +50,7 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
 
     private boolean mEmptyViewEnabled;
 
-    private AddVocaCallback mCallback;
+    private RequestAddVocaCallback mCallback;
 
     public static QuizViewFragment newInstance() {
         QuizViewFragment fragment = new QuizViewFragment();
@@ -105,10 +106,10 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof AddVocaCallback) {
-            mCallback = (AddVocaCallback)context;
+        if (context instanceof RequestAddVocaCallback) {
+            mCallback = (RequestAddVocaCallback)context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement AddVocaCallback");
+            throw new RuntimeException(context.toString() + " must implement RequestAddVocaCallback");
         }
     }
 
@@ -213,6 +214,28 @@ public class QuizViewFragment extends Fragment implements IQuizView, View.OnClic
         AlertDialog dialog = builder.create();
         ViewUtil.setDialogButtonColor(dialog, color, color, color);
         dialog.show();
+    }
+
+    public boolean onBackPressed() {
+        String candidateWord = mEditWord.getText().toString();
+        if (!candidateWord.isEmpty()) {
+            mEditWord.setText("");
+            return true;
+        }
+        return false;
+    }
+
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+//        switch (keyCode) {
+//            case KeyEvent.KEYCODE_F12:
+//                //TODO
+//            return true;
+//        }
+        return false;
+    }
+
+    public void refresh() {
+        mPresenter.refresh();
     }
 
     private void enableEmptyView(boolean enable) {

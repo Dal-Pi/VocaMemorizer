@@ -1,5 +1,6 @@
 package com.kania.vocamemorizer.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,16 +8,20 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 
 import com.kania.vocamemorizer.R;
 import com.kania.vocamemorizer.util.ViewUtil;
 
-public class MainActivity extends AppCompatActivity implements QuizViewFragment.AddVocaCallback {
+public class MainActivity extends AppCompatActivity implements QuizViewFragment.RequestAddVocaCallback {
+
+    public static final int REQ_CODE_ADD_VOCA = 100;
 
     private FragmentManager mFragmentManager;
-    private Fragment mQuizView;
+
+    private QuizViewFragment mQuizViewFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +35,19 @@ public class MainActivity extends AppCompatActivity implements QuizViewFragment.
             actionbar.setDisplayShowTitleEnabled(false);
         }
 
-
         ViewUtil.changeStatusbarColor(this);
+
         mFragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {
             setQuizView();
+        }
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        if (fragment instanceof QuizViewFragment) {
+            mQuizViewFragment = (QuizViewFragment)fragment;
         }
     }
 
@@ -50,14 +63,51 @@ public class MainActivity extends AppCompatActivity implements QuizViewFragment.
     }
 
     @Override
+    public void onBackPressed() {
+        if (mQuizViewFragment != null) {
+            if (mQuizViewFragment.onBackPressed()) {
+                return;
+            }
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (mQuizViewFragment != null) {
+            if (mQuizViewFragment.onKeyUp(keyCode, event)) {
+                return true;
+            }
+        }
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_F8:
+                onRequestAdd();
+                return true;
+            default:
+                return super.onKeyUp(keyCode, event);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQ_CODE_ADD_VOCA) {
+            if (resultCode == RESULT_OK) {
+                if (mQuizViewFragment != null) {
+                    mQuizViewFragment.refresh();
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public void onRequestAdd() {
-        AddVocaActivity.actionStartAddVoca(this);
+        AddVocaActivity.actionStartAddVoca(this, REQ_CODE_ADD_VOCA);
     }
 
     private void setQuizView() {
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        mQuizView = QuizViewFragment.newInstance();
-        ft.add(R.id.act_main_container, mQuizView,
+        ft.add(R.id.act_main_container, QuizViewFragment.newInstance(),
                 QuizViewFragment.class.getCanonicalName());
         ft.commit();
     }

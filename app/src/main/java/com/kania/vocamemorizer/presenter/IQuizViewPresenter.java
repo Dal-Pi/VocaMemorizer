@@ -10,4 +10,5 @@ public interface IQuizViewPresenter {
     void selectVerify(String candidate);
     void selectRemain();
     void selectRemove();
+    void refresh();
 }

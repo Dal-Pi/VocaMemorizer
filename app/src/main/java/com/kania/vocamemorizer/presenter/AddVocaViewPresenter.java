@@ -28,7 +28,7 @@ public class AddVocaViewPresenter implements IAddVocaViewPresenter {
                 new VocaProvider.RequestEndCallback() {
                     @Override
                     public void onEndRequest() {
-                        mView.finish();
+                        mView.addFinished();
                     }
                 });
     }
