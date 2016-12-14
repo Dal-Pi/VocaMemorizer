@@ -1,4 +1,4 @@
-package com.kania.vocamemorizer.view;
+package com.kania.vocamemorizer.view.quiz;
 
 import com.kania.vocamemorizer.data.VocaData;
 

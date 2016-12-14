@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/color_background"
-    tools:context="com.kania.vocamemorizer.view.AddVocaActivity">
+    tools:context="com.kania.vocamemorizer.view.add.AddVocaActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/act_add_toolbar"

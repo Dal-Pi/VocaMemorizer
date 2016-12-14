@@ -1,4 +1,4 @@
-package com.kania.vocamemorizer.view;
+package com.kania.vocamemorizer.view.quiz;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.kania.vocamemorizer.R;
 import com.kania.vocamemorizer.util.ViewUtil;
+import com.kania.vocamemorizer.view.add.AddVocaActivity;
+import com.kania.vocamemorizer.view.slideshow.SlideShowActivity;
 
-public class MainActivity extends AppCompatActivity implements QuizViewFragment.RequestAddVocaCallback {
+public class QuizActivity extends AppCompatActivity implements QuizViewFragment.RequestAddVocaCallback {
 
     public static final int REQ_CODE_ADD_VOCA = 100;
 
@@ -98,6 +101,18 @@ public class MainActivity extends AppCompatActivity implements QuizViewFragment.
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int menuId = item.getItemId();
+        switch (menuId) {
+            case R.id.menu_activity_main_slideshow:
+                SlideShowActivity.actionStartSlideShow(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

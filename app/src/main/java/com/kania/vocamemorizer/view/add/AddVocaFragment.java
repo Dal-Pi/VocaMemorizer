@@ -1,4 +1,4 @@
-package com.kania.vocamemorizer.view;
+package com.kania.vocamemorizer.view.add;
 
 import android.content.Context;
 import android.os.Bundle;

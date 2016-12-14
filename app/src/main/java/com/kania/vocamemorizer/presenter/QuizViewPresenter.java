@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.kania.vocamemorizer.data.VocaData;
 import com.kania.vocamemorizer.data.VocaProvider;
-import com.kania.vocamemorizer.view.IQuizView;
+import com.kania.vocamemorizer.view.quiz.IQuizView;
 
 /**
  * Created by Seonghan Kim on 2016-11-03.

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.kania.vocamemorizer.data.VocaData;
 import com.kania.vocamemorizer.data.VocaProvider;
-import com.kania.vocamemorizer.view.IAddVocaView;
+import com.kania.vocamemorizer.view.add.IAddVocaView;
 
 /**
  * Created by Seonghan Kim on 2016-11-03.

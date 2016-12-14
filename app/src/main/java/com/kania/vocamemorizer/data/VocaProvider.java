@@ -3,6 +3,7 @@ package com.kania.vocamemorizer.data;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 /**
@@ -94,6 +95,16 @@ public class VocaProvider {
         }
         //3. get word
         return mVocaList.getFirst();
+    }
+
+    public ArrayList<VocaData> getAllList() {
+        ArrayList<VocaData> ret = new ArrayList<>();
+        for (VocaData voca : mVocaList) {
+            if (!voca.isInputPoint()) {
+                ret.add(voca);
+            }
+        }
+        return ret;
     }
 
     private int getVocaCount() {

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/color_background"
-    tools:context="com.kania.vocamemorizer.view.MainActivity">
+    tools:context="com.kania.vocamemorizer.view.quiz.QuizActivity">
 
     <!--<android.support.design.widget.AppBarLayout-->
         <!--android:id="@+id/act_main_layout_toolbar"-->

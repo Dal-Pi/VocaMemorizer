@@ -1,4 +1,4 @@
-package com.kania.vocamemorizer.view;
+package com.kania.vocamemorizer.view.add;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,6 +28,7 @@ public class AddVocaActivity extends AppCompatActivity
             fromContext.startActivity(intent);
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
